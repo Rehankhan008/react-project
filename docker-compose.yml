@@ -1,0 +1,10 @@
+version: '3'
+services:
+  react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: reactjs-container
+    image: reactjs-guvi:latest
+    ports:
+      - "80:80"
