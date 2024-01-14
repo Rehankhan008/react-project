@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: reactjs-container
+    container_name: react-app-container
     image: reactjs-guvi:latest
     ports:
       - "80:80"
