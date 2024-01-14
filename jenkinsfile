@@ -71,6 +71,7 @@ pipeline {
                         }
                         echo "Sending email notification..."
                         emailext to: 'rehan81981@gmail.com',
+B
                                 subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS',
                                 body: """
                                 The build #${BUILD_NUMBER} was successful. 
