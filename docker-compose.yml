@@ -7,4 +7,4 @@ services:
     container_name: react-app-container
     image: reactjs-guvi:latest
     ports:
-      - "80:80"
+      - "808080808080808080:80"
