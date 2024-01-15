@@ -9,14 +9,14 @@ pipeline {
         stage('git clone') {
             steps {
                 script {
-                    GIT_BRANCH = env.BRANCH_NAME ?: 'HEAD'
                     echo "Cloning the repository..."
-                    checkout scmGit(branches: [[name: '*/dev'], [name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/Rehankhan008/react-project.git']])
-                    echo "Current Git Branch: ${GIT_BRANCH}"
+                     checkout scmGit(branches: [[name: '*/dev'], [name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/Rehankhan008/react-project.git']])
+                    echo "Current Git Branch: ${env.BRANCH_NAME}"
                 }
             }
         }
 
+       
         stage('build') {
             steps {
                 script {
@@ -38,48 +38,36 @@ pipeline {
         stage('push to docker hub') {
             steps {
                 script {
-                    echo "Current Git Branch: ${GIT_BRANCH}"
+                    def branchName = env.BRANCH_NAME ?: 'main'
+                    echo "Current Git Branch: ${branchName}"
 
-                    if (GIT_BRANCH == 'HEAD') {
-                        echo "HEAD reference detected. Defaulting to 'main' branch..."
-                        GIT_BRANCH = 'dev'
-                        echo "Updated Git Branch: ${GIT_BRANCH}"
-                    }
+                    withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub1')]) {
+                        echo "Docker login..."
+                        sh ('docker login -u rehan008 -p $dockerhub1')
 
-                    if (GIT_BRANCH == 'dev') {
-                        echo "Pushing to capstone-dev repository..."
-                        withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub1')]) {
-                            echo "Docker login..."
-                            sh ('docker login -u rehan008 -p ${dockerhub1}')
-                            echo "Tagging the Docker image..."
+                        if (branchName == 'dev' || branchName == 'main') {
+                            echo "Pushing to capstone-dev repository..."
                             sh 'docker tag reactjs-guvi:latest rehan008/capstone-dev:08'
-                            echo "Pushing the Docker image..."
                             sh 'docker push rehan008/capstone-dev:08'
-                        }
-                    } else if (GIT_BRANCH == 'main') {
-                        echo "Pushing to capstone-prod repository..."
-                        withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub1')]) {
-                            echo "Docker login..."
-                            sh ('docker login -u rehan008 -p ${dockerhub1}')
-                            echo "Tagging the Docker image..."
+
+                            echo "Pushing to capstone-prod repository..."
                             sh 'docker tag reactjs-guvi:latest rehan008/capstone-prod:08'
-                            echo "Pushing the Docker image..."
                             sh 'docker push rehan008/capstone-prod:08'
-                            
-                            echo "Docker logout..."
-                            sh 'docker logout'
+                        } else {
+                            echo "Not pushing to Docker Hub. Branch not recognized: ${branchName}"
                         }
-                        echo "Sending email notification..."
-                        emailext to: 'rehan81981@gmail.com',
-B
-                                subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS',
-                                body: """
-                                The build #${BUILD_NUMBER} was successful. 
-                                You can view the build log [here](${BUILD_URL}console).
-                                """
-                    } else {
-                        echo "Not pushing to Docker Hub. Branch not recognized: ${GIT_BRANCH}"
+
+                        echo "Docker logout..."
+                        sh 'docker logout'
                     }
+                    
+                    echo "Sending email notification..."
+                    emailext to: 'rehan81981@gmail.com',
+                            subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS',
+                            body: """
+                            The build #${BUILD_NUMBER} was successful. 
+                            You can view the build log [here](${BUILD_URL}console).
+                            """
                 }
             }
         }
