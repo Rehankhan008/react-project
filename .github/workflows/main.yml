@@ -28,5 +28,5 @@ jobs:
       - name: Push to Docker Hub
         uses: docker/push-action@v3
         with:
-          repository: rehan008/github-action
-          tag: latest
+          repository: docker push rehan008/github-action:latest
+        
