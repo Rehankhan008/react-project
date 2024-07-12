@@ -25,8 +25,15 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
+      - name: Extract Matadata (tags, labels)for docker 
+        id: Meta
+        uses: docker/metadata-action@v3
+        with:
+          images: rehan008/github-action
+      
       - name: Push to Docker Hub
         uses: docker/build-push-action@v3
         with:
-          tags: rehan008/github-action:latest
+          tags: ${{ steps.meta.output.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
         
