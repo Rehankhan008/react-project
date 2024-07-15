@@ -1,6 +1,8 @@
 name: docker build and deploy
 
 on:
+  repository_dispatch:
+  types: [my-event]
   push:
     branches:
       - dev
@@ -9,11 +11,20 @@ jobs:
   build:
     runs-on: self-hosted
     environment: prod
+  
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: run-workflow 
+        uses: actions/checkout@v2
+          with:
+            fetch-deph: 0
+      - name: print trigger details 
+        run: |
+          echo ${{ github.event.client_payload.github.action }}
+           echo ${{ github.event.client_payload.github.actor }}
 
       - name: Build Docker image
         run: sh build.sh
