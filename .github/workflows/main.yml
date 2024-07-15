@@ -12,8 +12,6 @@ jobs:
   build:
     runs-on: self-hosted
     environment: prod
-    repository_dispatch:
-    types: [my-event]
   
 
     steps:
