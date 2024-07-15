@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     environment: prod
 
     steps:
@@ -51,14 +51,9 @@ jobs:
       #       ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
       #       # Print the public key to be added to the server
       #       cat ~/.ssh/id_rsa.pub
-      - name: Deploy to AWS EC2
-        # run: |
-        #   ssh ubuntu@ec2-52-66-242-35.ap-south-1.compute.amazonaws.com
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+      # - name: Deploy to AWS EC2
+      #   run: |
+      #     ssh ubuntu@ec2-52-66-242-35.ap-south-1.compute.amazonaws.com
       # - name: Install SSH key
       #   uses: webfactory/ssh-agent@v0.5.4
       #   with:
