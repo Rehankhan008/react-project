@@ -1,22 +1,27 @@
 name: docker build and deploy
 
 on:
-  repository_dispatch:
-  types: [my-event]
   push:
     branches:
       - dev
+      
+  repository_dispatch:
+  types: [my-event]
 
 jobs:
   build:
     runs-on: self-hosted
     environment: prod
+    repository_dispatch:
+    types: [my-event]
   
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
+      
+    
+  
       - name: run-workflow 
         uses: actions/checkout@v2
         with:
