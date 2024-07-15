@@ -60,7 +60,7 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.4
         with:
           echo "${SSH_PRIVATE_KEY}" | ssh-add -
-          # ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
           
 
       - name: SSH into EC2 instance and deploy application
