@@ -50,10 +50,17 @@ jobs:
       #   run: |
       #     ssh ubuntu@ec2-52-66-242-35.ap-south-1.compute.amazonaws.com
       #     ls
-      - name: Deploy to AWS EC2
-        uses: appleboy/ssh-action@master
+      # - name: Deploy to AWS EC2
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.REMOTE_HOST }}
+      #     username: ${{ secrets.REMOTE_USER }}
+      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.5.4
         with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-        
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: SSH into EC2 instance and deploy application
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} ec2-52-66-242-35.ap-south-1.compute.amazonaws.com
