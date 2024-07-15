@@ -13,12 +13,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      # - name: Generate SSH key
-      #   run: |
-      #     mkdir -p ~/.ssh
-      #     ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
-      #     # Print the public key to be added to the server
-      #     cat ~/.ssh/id_rsa.pub
+
 
       - name: Build Docker image
         run: sh build.sh
@@ -50,18 +45,26 @@ jobs:
       #   run: |
       #     ssh ubuntu@ec2-52-66-242-35.ap-south-1.compute.amazonaws.com
       #     ls
-      # - name: Deploy to AWS EC2
-      #   uses: appleboy/ssh-action@master
+      - name: Generate SSH key
+        run: |
+            mkdir -p ~/.ssh
+            ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
+            # Print the public key to be added to the server
+            cat ~/.ssh/id_rsa.pub
+      - name: Deploy to AWS EC2
+        run: |
+          ssh ubuntu@ec2-52-66-242-35.ap-south-1.compute.amazonaws.com
+        # uses: appleboy/ssh-action@master
+        # with:
+        #   host: ${{ secrets.REMOTE_HOST }}
+        #   username: ${{ secrets.REMOTE_USER }}
+        #   key: ${{ secrets.SSH_PRIVATE_KEY }}
+      # - name: Install SSH key
+      #   uses: webfactory/ssh-agent@v0.5.4
       #   with:
-      #     host: ${{ secrets.REMOTE_HOST }}
-      #     username: ${{ secrets.REMOTE_USER }}
-      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
-      - name: Install SSH key
-        uses: webfactory/ssh-agent@v0.5.4
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      #     ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
           
 
-      - name: SSH into EC2 instance and deploy application
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} ec2-52-66-242-35.ap-south-1.compute.amazonaws.com
+      # - name: SSH into EC2 instance and deploy application
+      #   run: |
+      #     ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} ec2-52-66-242-35.ap-south-1.compute.amazonaws.com
