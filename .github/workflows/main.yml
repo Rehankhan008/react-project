@@ -19,12 +19,12 @@ jobs:
 
       - name: run-workflow 
         uses: actions/checkout@v2
-          with:
-            fetch-deph: 0
+        with:
+          fetch-deph: 0
       - name: print trigger details 
         run: |
           echo ${{ github.event.client_payload.github.action }}
-           echo ${{ github.event.client_payload.github.actor }}
+          echo ${{ github.event.client_payload.github.actor }}
 
       - name: Build Docker image
         run: sh build.sh
