@@ -46,14 +46,14 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels}}
      
-      - name: Generate SSH key
-        run: |
-          ssh ubuntu@ec2-52-66-242-35.ap-south-1.compute.amazonaws.com
-          ls
-      # - name: Deploy to AWS EC2
-      #   uses: appleboy/ssh-action@master
-      #   with:
-      #     host: ${{ secrets.REMOTE_HOST }}
-      #     username: ${{ secrets.REMOTE_USER }}
-      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
+      # - name: Generate SSH key
+      #   run: |
+      #     ssh ubuntu@ec2-52-66-242-35.ap-south-1.compute.amazonaws.com
+      #     ls
+      - name: Deploy to AWS EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
         
