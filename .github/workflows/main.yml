@@ -13,6 +13,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Generate SSH key
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
+          # Print the public key to be added to the server
+          cat ~/.ssh/id_rsa.pub
 
       - name: Build Docker image
         run: sh build.sh
