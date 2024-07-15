@@ -45,12 +45,12 @@ jobs:
       #   run: |
       #     ssh ubuntu@ec2-52-66-242-35.ap-south-1.compute.amazonaws.com
       #     ls
-      - name: Generate SSH key
-        run: |
-            mkdir -p ~/.ssh
-            ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
-            # Print the public key to be added to the server
-            cat ~/.ssh/id_rsa.pub
+      # - name: Generate SSH key
+      #   run: |
+      #       mkdir -p ~/.ssh
+      #       ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
+      #       # Print the public key to be added to the server
+      #       cat ~/.ssh/id_rsa.pub
       - name: Deploy to AWS EC2
         run: |
           ssh ubuntu@ec2-52-66-242-35.ap-south-1.compute.amazonaws.com
