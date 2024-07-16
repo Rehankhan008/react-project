@@ -68,9 +68,7 @@ jobs:
         script: |
             curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
             sudo apt-get install -y nodejs
-            sudo npm install -g pm2
-            pm2 start npm --name "api" -- run start
             git pull origin main
             npm install
             npm run build
-            pm2 restart api
+            
