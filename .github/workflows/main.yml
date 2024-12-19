@@ -55,6 +55,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels}}
   deploy:
     runs-on: ubuntu-latest
+    environment: prod
     
 
     steps:
